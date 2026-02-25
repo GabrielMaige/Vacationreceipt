@@ -1,6 +1,505 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vacation Awaits Utalii College · Payment Receipt System</title>
+    <!-- Bootstrap 5 + Font Awesome 6 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background: #f4f7fc;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+        .college-header {
+            background: linear-gradient(135deg, #003366, #0a4d8c);
+            color: white;
+            border-radius: 0 0 1rem 1rem;
+            padding: 1.5rem 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        .college-header h1 {
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.2rem;
+        }
+        .college-header p {
+            opacity: 0.9;
+            margin-bottom: 0;
+            font-size: 1.1rem;
+        }
+        .card-form {
+            border: none;
+            border-radius: 1.5rem;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+            background: white;
+            padding: 1.8rem 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .table-responsive {
+            border-radius: 1rem;
+            background: white;
+            padding: 1rem 1rem 0.5rem 1rem;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+        }
+        .btn-primary {
+            background: #0a4d8c;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            font-weight: 500;
+            border-radius: 2rem;
+        }
+        .btn-primary:hover {
+            background: #002f5f;
+        }
+        .btn-outline-excel {
+            border: 2px solid #1f7b4c;
+            color: #1f7b4c;
+            border-radius: 2rem;
+            font-weight: 500;
+        }
+        .btn-outline-excel:hover {
+            background: #1f7b4c;
+            color: white;
+        }
+        .receipt-badge {
+            background: #e9f0f9;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-weight: 500;
+            color: #0a4d8c;
+        }
+        .total-amount {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #003366;
+        }
+        .action-icons i {
+            font-size: 1.1rem;
+            margin: 0 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .action-icons .fa-print { color: #0a4d8c; }
+        .action-icons .fa-trash-can { color: #b02a37; }
+        .action-icons i:hover { transform: scale(1.15); }
+        .receipt-no-cell {
+            font-family: monospace;
+            font-weight: 500;
+        }
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            color: #5e6f8d;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- College header -->
+    <div class="college-header text-center">
+        <h1><i class="fas fa-umbrella-beach me-2"></i>VACATION AWAITS UTALII COLLEGE</h1>
+        <p>Student Payments · Receipt & Record System</p>
+        <span class="receipt-badge mt-2 d-inline-block"><i class="far fa-credit-card me-1"></i> reliable receipt keeping</span>
+    </div>
+
+    <!-- Payment form card -->
+    <div class="card-form">
+        <h4 class="mb-4" style="color:#003366;"><i class="fas fa-pen-alt me-2"></i>Record new payment</h4>
+        <form id="paymentForm">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Student name</label>
+                    <input type="text" class="form-control" id="studentName" placeholder="e.g. Anna Mushi" required>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label fw-semibold">Reg number</label>
+                    <input type="text" class="form-control" id="regNumber" placeholder="VU24/001" required>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label fw-semibold">Date</label>
+                    <input type="date" class="form-control" id="paymentDate" required>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label fw-semibold">Payment type</label>
+                    <select class="form-select" id="paymentType">
+                        <option>Tuition</option>
+                        <option>Accommodation</option>
+                        <option>Activity fee</option>
+                        <option>Library</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label fw-semibold">Amount (TZS)</label>
+                    <input type="number" class="form-control" id="amount" step="1000" min="1000" value="50000" required>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Notes (optional)</label>
+                    <input type="text" class="form-control" id="notes" placeholder="receipt note">
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100"><i class="fas fa-save me-2"></i>Save payment</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Records toolbar -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+        <h5 class="m-0"><i class="fas fa-database me-2"></i>Payment records</h5>
+        <div>
+            <button class="btn btn-outline-excel me-2" id="exportExcelBtn"><i class="fas fa-file-excel me-1"></i>Export to Excel</button>
+            <button class="btn btn-outline-secondary" id="clearStorageBtn"><i class="fas fa-trash-alt me-1"></i>Clear all</button>
+        </div>
+    </div>
+
+    <!-- Payments table -->
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Receipt No.</th>
+                    <th>Student</th>
+                    <th>Reg #</th>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Amount (TZS)</th>
+                    <th>Notes</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="paymentsTableBody">
+                <!-- dynamic rows will appear here -->
+            </tbody>
+            <tfoot id="tableFooter" class="table-secondary fw-semibold">
+                <!-- total row will be injected -->
+            </tfoot>
+        </table>
+        <div id="emptyMessage" class="text-center text-muted py-4" style="display: none;">
+            <i class="fas fa-receipt fa-2x mb-2"></i><br>No payments recorded yet. Use the form above.
+        </div>
+    </div>
+
+    <footer>
+        <i class="far fa-check-circle me-1"></i> records are stored in your browser (localStorage). Receipts open in a new window.
+    </footer>
+</div>
+
+<script>
+    (function() {
+        // ========== DATA & STORAGE ==========
+        const STORAGE_KEY = 'utaalii_payments';
+        let payments = [];
+
+        // Load from localStorage or seed sample data
+        function loadFromStorage() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                try {
+                    payments = JSON.parse(stored);
+                } catch (e) {
+                    payments = [];
+                }
+            } 
+            if (!payments.length) {
+                // seed two nice sample records
+                payments = [
+                    { id: 'samp1', receiptNo: 'RCPT-250301-782', studentName: 'Jane Mwangi', regNo: 'VU2024/12', date: '2025-03-20', type: 'Tuition', amount: 450000, notes: 'Semester 1 full' },
+                    { id: 'samp2', receiptNo: 'RCPT-250315-194', studentName: 'Omar Rashid', regNo: 'VU2024/07', date: '2025-03-22', type: 'Accommodation', amount: 275000, notes: 'Deposit' }
+                ];
+                saveToStorage();
+            }
+        }
+
+        function saveToStorage() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(payments));
+        }
+
+        // Helper: generate unique id and readable receipt number
+        function generateReceiptNo() {
+            const now = Date.now();
+            const rand = Math.floor(Math.random() * 900 + 100); // 100-999
+            return 'RCPT-' + now.toString().slice(-6) + '-' + rand;
+        }
+
+        function generateUniqueId() {
+            return Date.now() + '-' + Math.random().toString(36).substring(2, 10);
+        }
+
+        // ========== RENDER TABLE ==========
+        function renderTable() {
+            const tbody = document.getElementById('paymentsTableBody');
+            const emptyDiv = document.getElementById('emptyMessage');
+            const footer = document.getElementById('tableFooter');
+
+            if (!payments.length) {
+                tbody.innerHTML = '';
+                emptyDiv.style.display = 'block';
+                footer.innerHTML = `<tr><td colspan="8" class="text-center">Total: TZS 0</td></tr>`;
+                return;
+            }
+
+            emptyDiv.style.display = 'none';
+            let rows = '';
+            let totalSum = 0;
+
+            payments.forEach(p => {
+                totalSum += Number(p.amount) || 0;
+                rows += `<tr>
+                    <td class="receipt-no-cell"><span class="badge bg-light text-dark">${p.receiptNo || 'N/A'}</span></td>
+                    <td>${escapeHtml(p.studentName) || '—'}</td>
+                    <td>${escapeHtml(p.regNo) || '—'}</td>
+                    <td>${p.date || '—'}</td>
+                    <td>${escapeHtml(p.type) || '—'}</td>
+                    <td class="fw-semibold">${Number(p.amount).toLocaleString()}</td>
+                    <td><small class="text-secondary">${escapeHtml(p.notes) || ''}</small></td>
+                    <td class="action-icons">
+                        <i class="fas fa-print" title="Print receipt" onclick="printReceipt('${p.id}')"></i>
+                        <i class="fas fa-trash-can" title="Delete record" onclick="deletePayment('${p.id}')"></i>
+                    </td>
+                </tr>`;
+            });
+
+            tbody.innerHTML = rows;
+            footer.innerHTML = `<tr><td colspan="6" class="text-end">TOTAL AMOUNT:</td><td class="fw-bold total-amount">TZS ${totalSum.toLocaleString()}</td><td></td></tr>`;
+        }
+
+        // simple escape for XSS
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/[&<>"]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                if (m === '"') return '&quot;';
+                return m;
+            });
+        }
+
+        // ========== CRUD OPERATIONS ==========
+        window.addPayment = function(event) {
+            event.preventDefault();
+
+            const studentName = document.getElementById('studentName').value.trim();
+            const regNo = document.getElementById('regNumber').value.trim();
+            const date = document.getElementById('paymentDate').value;
+            const type = document.getElementById('paymentType').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            const notes = document.getElementById('notes').value.trim();
+
+            if (!studentName || !regNo || !date || !type || !amount || amount < 1000) {
+                alert('Please fill all required fields (amount minimum 1000 TZS).');
+                return;
+            }
+
+            // create new payment
+            const newPayment = {
+                id: generateUniqueId(),
+                receiptNo: generateReceiptNo(),
+                studentName: studentName,
+                regNo: regNo,
+                date: date,
+                type: type,
+                amount: amount,
+                notes: notes || ''
+            };
+
+            payments.push(newPayment);
+            saveToStorage();
+            renderTable();
+
+            // reset form fields (keep date as today maybe)
+            document.getElementById('studentName').value = '';
+            document.getElementById('regNumber').value = '';
+            document.getElementById('paymentDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('amount').value = '50000';
+            document.getElementById('notes').value = '';
+            // type stays at default (Tuition)
+        };
+
+        window.deletePayment = function(id) {
+            if (confirm('Delete this payment record? This action cannot be undone.')) {
+                payments = payments.filter(p => p.id !== id);
+                saveToStorage();
+                renderTable();
+            }
+        };
+
+        // print receipt: open new window with nice layout + print button
+        window.printReceipt = function(id) {
+            const payment = payments.find(p => p.id === id);
+            if (!payment) return;
+
+            // build receipt html (new window)
+            const receiptWindow = window.open('', '_blank', 'width=500,height=700,scrollbars=yes');
+            if (!receiptWindow) {
+                alert('Please allow pop-ups to print receipt.');
+                return;
+            }
+
+            const collegeName = 'VACATION AWAITS UTALII COLLEGE';
+            const address = 'P.O. Box 3210, Dar es Salaam, Tanzania | Tel: +255 123 456 789';
+            
+            const html = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Receipt ${payment.receiptNo}</title>
+                <style>
+                    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 20px; display: flex; justify-content: center; }
+                    .receipt-paper { max-width: 420px; background: white; border-radius: 20px; padding: 30px 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); margin: auto; }
+                    .college-title { text-align: center; border-bottom: 2px dashed #0a4d8c; padding-bottom: 15px; margin-bottom: 20px; }
+                    .college-title h2 { margin: 0; color: #003366; font-weight: 700; letter-spacing: 0.5px; font-size: 1.8rem; }
+                    .college-title p { margin: 5px 0 0; color: #2d4b75; font-size: 0.9rem; }
+                    .receipt-details { margin-bottom: 25px; }
+                    .row-detail { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dotted #ccc; }
+                    .row-detail .label { font-weight: 600; color: #1f3a5f; }
+                    .amount-box { background: #e9f0f9; border-radius: 16px; padding: 18px 15px; margin: 25px 0; text-align: center; }
+                    .amount-box .amount { font-size: 2.2rem; font-weight: 700; color: #003366; line-height: 1.2; }
+                    .amount-box .currency { font-size: 1.2rem; color: #1f4b7a; }
+                    .footer-note { text-align: center; margin-top: 30px; color: #2d4b75; font-style: italic; border-top: 1px solid #ccc; padding-top: 15px; }
+                    .actions { display: flex; gap: 12px; justify-content: center; margin: 25px 0 10px; }
+                    .btn { padding: 10px 24px; border: none; border-radius: 40px; font-weight: 600; cursor: pointer; background: #0a4d8c; color: white; font-size: 1rem; transition: 0.2s; }
+                    .btn.print { background: #1f7b4c; }
+                    .btn.close { background: #6c757d; }
+                    .btn:hover { opacity: 0.9; }
+                    @media print {
+                        .actions, .btn, .no-print { display: none; }
+                        body { background: white; padding: 0; }
+                        .receipt-paper { box-shadow: none; border-radius: 0; }
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="receipt-paper">
+                    <div class="college-title">
+                        <h2>🏝️ ${collegeName}</h2>
+                        <p>${address}</p>
+                    </div>
+                    <div class="receipt-details">
+                        <div class="row-detail"><span class="label">Receipt No :</span> <span>${payment.receiptNo}</span></div>
+                        <div class="row-detail"><span class="label">Date :</span> <span>${payment.date}</span></div>
+                        <div class="row-detail"><span class="label">Student :</span> <span>${escapeHtml(payment.studentName)}</span></div>
+                        <div class="row-detail"><span class="label">Reg No :</span> <span>${escapeHtml(payment.regNo)}</span></div>
+                        <div class="row-detail"><span class="label">Payment for :</span> <span>${escapeHtml(payment.type)}</span></div>
+                        ${payment.notes ? `<div class="row-detail"><span class="label">Note :</span> <span>${escapeHtml(payment.notes)}</span></div>` : ''}
+                    </div>
+                    <div class="amount-box">
+                        <span class="currency">TZS</span>
+                        <div class="amount">${Number(payment.amount).toLocaleString()}</div>
+                        <div style="font-size:0.9rem; color:#2d4b75;">Paid in full</div>
+                    </div>
+                    <div class="footer-note">
+                        🎓 Thank you for investing in your future!<br>
+                        <span style="font-size:0.8rem;">Receipt generated by Vacation Awaits Utalii College</span>
+                    </div>
+                    <div class="actions no-print">
+                        <button class="btn print" onclick="window.print()"><i class="fas fa-print"></i> Print receipt</button>
+                        <button class="btn close" onclick="window.close()"><i class="fas fa-times"></i> Close</button>
+                    </div>
+                </div>
+                <script>
+                    // small tweak to make font awesome available (icons only inside button)
+                <\/script>
+            </body>
+            </html>
+            `;
+            receiptWindow.document.write(html);
+            receiptWindow.document.close();
+            receiptWindow.focus();
+        };
+
+        // export all payments to CSV (Excel compatible)
+        window.exportToExcel = function() {
+            if (!payments.length) {
+                alert('No payment records to export.');
+                return;
+            }
+
+            // headers
+            const headers = ['Receipt No', 'Student Name', 'Reg Number', 'Date', 'Payment Type', 'Amount (TZS)', 'Notes'];
+            const rows = payments.map(p => [
+                p.receiptNo,
+                p.studentName,
+                p.regNo,
+                p.date,
+                p.type,
+                p.amount,
+                p.notes || ''
+            ]);
+
+            let csvContent = headers.join(',') + '\n';
+            rows.forEach(row => {
+                const escapedRow = row.map(cell => {
+                    if (typeof cell === 'string' && (cell.includes(',') || cell.includes('"'))) {
+                        return `"${cell.replace(/"/g, '""')}"`;
+                    }
+                    return cell;
+                }).join(',');
+                csvContent += escapedRow + '\n';
+            });
+
+            // Add BOM for UTF-8 special chars
+            const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.href = url;
+            link.setAttribute('download', `payments_export_${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        };
+
+        // clear all data (with confirmation)
+        function clearAllRecords() {
+            if (confirm('⚠️ Delete ALL payment records permanently?')) {
+                payments = [];
+                saveToStorage();
+                renderTable();
+            }
+        }
+
+        // set today's date as default in form
+        function setDefaultDate() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('paymentDate').value = today;
+        }
+
+        // ========== INIT & EVENT LISTENERS ==========
+        window.onload = function() {
+            loadFromStorage();
+            setDefaultDate();
+            renderTable();
+
+            // form submit
+            document.getElementById('paymentForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                addPayment(e);
+            });
+
+            // export button
+            document.getElementById('exportExcelBtn').addEventListener('click', exportToExcel);
+
+            // clear storage button
+            document.getElementById('clearStorageBtn').addEventListener('click', clearAllRecords);
+        };
+
+        // expose delete & print globally (already via window)
+    })();
+</script>
+
+<!-- Bootstrap JS (optional for some interactions, but not strictly needed) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Utalii College · Payment Receipt</title>
