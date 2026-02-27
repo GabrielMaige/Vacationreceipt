@@ -202,7 +202,7 @@
             return `
                 <div>
                     <div class="navbar">
-                        <span class="logo">✈️ Utalii College · admin</span>
+                        <span class="logo">Vacation Awaits Utalii College · admin</span>
                         <div>
                             <span class="badge-role">${currentUser.username} (${currentUser.role})</span>
                             <button id="logoutBtn" class="small secondary">Logout</button>
@@ -239,7 +239,25 @@
                                     <label>Amount (TSh)</label>
                                     <input type="number" id="amount" value="" min="0">
                                     <label>Payment for</label>
-                                    <input type="text" id="paymentFor" value="" placeholder="Tuition, hostel,registration,T-shirt etc">
+                                    <select id="paymentFor" name="paymentFor">
+  <option value="" disabled selected>-- Select payment type --</option>
+  <option value="Tuition">Tuition</option>
+  <option value="Hostel">Hostel</option>
+  <option value="Registration">Registration</option>
+  <option value="T-shirt">T-shirt</option>
+  <option value="Other">Other</option>
+</select>
+<label>Course paid for</label>
+                                    <select id="course paid" name="CoursepaidFor">
+  <option value="" disabled selected>-- Select course type --</option>
+  <option value="Toure Guide">Toure Guide</option>
+  <option value="Hotel Management">Hotel Management</option>
+  <option value="Tour Operator">Tour Operator</option>
+  <option value="Language">Language</option>
+  <option value="Computer Application">Computer Application</option>
+  <option value="Hair Dressing & Beauty">Hair Dressing & Beauty</option>
+  <option value="Other">Other</option>
+</select>
                                     <label>Date</label>
                                     <input type="date" id="date" value="${new Date().toISOString().slice(0,10)}">
                                     <div class="flex">
