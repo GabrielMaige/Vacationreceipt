@@ -190,7 +190,7 @@
                     <td>${r.studentName}</td>
                     <td>${r.date}</td>
                     <td>${r.paymentFor}</td>
-                    <td>KSh ${Number(r.amount).toLocaleString()}</td>
+                    <td>TSh ${Number(r.amount).toLocaleString()}</td>
                     <td>
                         <button class="small" data-id="${r.id}" data-action="editReceipt">✎ edit</button>
                         <button class="small danger" data-id="${r.id}" data-action="deleteReceipt">🗑</button>
@@ -213,7 +213,7 @@
                         <div>
                             <div class="totals-card">
                                 💰 TOTAL PAYMENTS<br>
-                                <span style="font-size: 3rem;">KSh ${totalPayments.toLocaleString()}</span>
+                                <span style="font-size: 3rem;">TSh ${totalPayments.toLocaleString()}</span>
                             </div>
 
                             <div class="password-section">
@@ -236,7 +236,7 @@
                                 <div id="receiptForm">
                                     <label>Student name</label>
                                     <input type="text" id="studentName" value="" placeholder="e.g. John Kamau">
-                                    <label>Amount (KSh)</label>
+                                    <label>Amount (TSh)</label>
                                     <input type="number" id="amount" value="" min="0">
                                     <label>Payment for</label>
                                     <input type="text" id="paymentFor" value="" placeholder="Tuition, hostel, etc">
@@ -277,7 +277,7 @@
                     <td>${r.studentName}</td>
                     <td>${r.date}</td>
                     <td>${r.paymentFor}</td>
-                    <td>KSh ${Number(r.amount).toLocaleString()}</td>
+                    <td>TSh ${Number(r.amount).toLocaleString()}</td>
                     <td>
                         <button class="small" data-id="${r.id}" data-action="editReceipt">✎ edit</button>
                         <button class="small danger" data-id="${r.id}" data-action="deleteReceipt">🗑</button>
@@ -301,7 +301,7 @@
                         <div id="receiptForm">
                             <label>Student name</label>
                             <input type="text" id="studentName" value="" placeholder="e.g. John Kamau">
-                            <label>Amount (KSh)</label>
+                            <label>Amount (TSh)</label>
                             <input type="number" id="amount" value="" min="0">
                             <label>Payment for</label>
                             <input type="text" id="paymentFor" value="" placeholder="Tuition, hostel, etc">
@@ -431,7 +431,7 @@
                         <div class="receipt">
                             <h2>✈️ Vacation Awaits Utalii College</h2>
                             <p><strong>Student:</strong> ${rec.studentName}</p>
-                            <p><strong>Amount paid:</strong> KSh ${Number(rec.amount).toLocaleString()}</p>
+                            <p><strong>Amount paid:</strong> TSh ${Number(rec.amount).toLocaleString()}</p>
                             <p><strong>Payment for:</strong> ${rec.paymentFor}</p>
                             <p><strong>Date:</strong> ${rec.date}</p>
                             <div class="signature-line">
@@ -451,7 +451,7 @@
             document.getElementById('exportExcelBtn')?.addEventListener('click', () => {
                 const receipts = getReceipts();
                 if (!receipts.length) { alert('No data to export'); return; }
-                const headers = ['Student', 'Date', 'Payment For', 'Amount (KSh)'];
+                const headers = ['Student', 'Date', 'Payment For', 'Amount (TSh)'];
                 const rows = receipts.map(r => [r.studentName, r.date, r.paymentFor, r.amount]);
                 const csvContent = [headers, ...rows].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
                 const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' }); // BOM for chinese/excel
