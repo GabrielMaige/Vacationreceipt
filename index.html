@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vacation Awaits Utalii · Payment receipts</title>
+    <title>Vacation Awaits Utalii College · Payment receipts</title>
     <style>
         * { box-sizing: border-box; margin: 0; font-family: 'Segoe UI', Roboto, system-ui, sans-serif; }
         body { background: #f0f4f8; display: flex; justify-content: center; padding: 20px; min-height: 100vh; }
@@ -132,10 +132,10 @@
                         <input type="password" id="loginPassword" placeholder="••••••••" value="admin123">
                         <button id="loginBtn" style="width: 100%;">Sign in</button>
                         <div style="margin-top: 20px; text-align: right;">
-                            <button class="secondary small" id="forgotPasswordBtn">Forgot password? (admin only)</button>
+                            <button class="secondary small" id="forgotPasswordBtn">Forgot password?</button>
                         </div>
                         <hr style="margin: 24px 0; border-color: #dbe5f0;">
-                        <div style="font-size:0.9rem; color:#2e4e7a;">Demo: admin/admin123  |  accountant/acc123</div>
+    
                     </div>
                 </div>
             `;
@@ -202,7 +202,7 @@
             return `
                 <div>
                     <div class="navbar">
-                        <span class="logo">✈️ Utalii College · admin</span>
+                        <span class="logo">Vacation Awaits Utalii College · admin</span>
                         <div>
                             <span class="badge-role">${currentUser.username} (${currentUser.role})</span>
                             <button id="logoutBtn" class="small secondary">Logout</button>
@@ -213,7 +213,7 @@
                         <div>
                             <div class="totals-card">
                                 💰 TOTAL PAYMENTS<br>
-                                <span style="font-size: 3rem;">KSh ${totalPayments.toLocaleString()}</span>
+                                <span style="font-size: 3rem;">TSh {totalPayments.toLocaleString()}</span>
                             </div>
 
                             <div class="password-section">
@@ -236,10 +236,10 @@
                                 <div id="receiptForm">
                                     <label>Student name</label>
                                     <input type="text" id="studentName" value="" placeholder="e.g. John Kamau">
-                                    <label>Amount (KSh)</label>
+                                    <label>Amount (TSh)</label>
                                     <input type="number" id="amount" value="" min="0">
                                     <label>Payment for</label>
-                                    <input type="text" id="paymentFor" value="" placeholder="Tuition, hostel, etc">
+                                    <input type="text" id="paymentFor" value="" placeholder="Tuition, hostel,registration,T-shirt etc">
                                     <label>Date</label>
                                     <input type="date" id="date" value="${new Date().toISOString().slice(0,10)}">
                                     <div class="flex">
@@ -289,7 +289,7 @@
             return `
                 <div>
                     <div class="navbar">
-                        <span class="logo">✈️ Utalii College · accountant</span>
+                        <span class="logo">Vacation Awaits Utalii College · accountant</span>
                         <div>
                             <span class="badge-role">${currentUser.username} (${currentUser.role})</span>
                             <button id="logoutBtn" class="small secondary">Logout</button>
@@ -304,7 +304,7 @@
                             <label>Amount (KSh)</label>
                             <input type="number" id="amount" value="" min="0">
                             <label>Payment for</label>
-                            <input type="text" id="paymentFor" value="" placeholder="Tuition, hostel, etc">
+                            <input type="text" id="paymentFor" value="" placeholder="Tuition, hostel,registration,T-shirt etc">
                             <label>Date</label>
                             <input type="date" id="date" value="${new Date().toISOString().slice(0,10)}">
                             <div class="flex">
@@ -429,9 +429,9 @@
                         </style>
                         </head><body>
                         <div class="receipt">
-                            <h2>✈️ Vacation Awaits Utalii College</h2>
+                            <h2>Vacation Awaits Utalii College</h2>
                             <p><strong>Student:</strong> ${rec.studentName}</p>
-                            <p><strong>Amount paid:</strong> KSh ${Number(rec.amount).toLocaleString()}</p>
+                            <p><strong>Amount paid:</strong> TSh ${Number(rec.amount).toLocaleString()}</p>
                             <p><strong>Payment for:</strong> ${rec.paymentFor}</p>
                             <p><strong>Date:</strong> ${rec.date}</p>
                             <div class="signature-line">
@@ -451,7 +451,7 @@
             document.getElementById('exportExcelBtn')?.addEventListener('click', () => {
                 const receipts = getReceipts();
                 if (!receipts.length) { alert('No data to export'); return; }
-                const headers = ['Student', 'Date', 'Payment For', 'Amount (KSh)'];
+                const headers = ['Student', 'Date', 'Payment For', 'Amount (TSh)'];
                 const rows = receipts.map(r => [r.studentName, r.date, r.paymentFor, r.amount]);
                 const csvContent = [headers, ...rows].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
                 const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' }); // BOM for chinese/excel
